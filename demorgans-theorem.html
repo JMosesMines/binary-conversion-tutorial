@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeMorgan's Theorem Mastery</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #8e44ad;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --success: #d4edda;
+            --success-border: #c3e6cb;
+            --success-text: #155724;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background);
+        }
+
+        h1, h2, h3 { color: var(--primary); }
+        
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .highlight-box {
+            background-color: #f5eef8;
+            border-left: 5px solid var(--secondary);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        select, button {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover { background-color: #6c3483; }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        #problem-statement {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th { background-color: #f5f6fa; font-weight: 600; }
+        
+        tr:nth-child(even) { background-color: #fafafa; }
+
+        /* The Illusion-Breaker: Renders crisp, independent stacked bars */
+        .bar {
+            position: relative;
+            display: inline-block;
+            padding-top: 5px; /* Creates gaps for nested bars automatically */
+        }
+
+        .bar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            border-top: 2px solid #2c3e50;
+        }
+        
+        .expr-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.3em;
+            background: #eee;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .final-answer {
+            margin-top: 25px;
+            font-size: 1.3em;
+            background: var(--success);
+            color: var(--success-text);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--success-border);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header class="card">
+        <h1>DeMorgan's Theorem</h1>
+        <p>In Boolean algebra and digital circuit design, <strong>DeMorgan's Theorem</strong> provides mathematical laws that allow us to convert mathematical conjunctions (AND) into disjunctions (OR) and vice-versa using inversion (NOT).</p>
+        
+        <p>This has huge real-world implications: it proves you can build any digital circuit using <em>only</em> NAND gates or <em>only</em> NOR gates, which dramatically streamlines hardware manufacturing pipelines.</p>
+
+        <div class="highlight-box">
+            <h3>The Two Mathematical Laws</h3>
+            <ul style="line-height: 2;">
+                <li>The complement of a product is equal to the sum of the complements.<br><span class="expr-text"><span class="bar">A &bull; B</span> = <span class="bar">A</span> + <span class="bar">B</span></span></li>
+                <li>The complement of a sum is equal to the product of the complements.<br><span class="expr-text"><span class="bar">A + B</span> = <span class="bar">A</span> &bull; <span class="bar">B</span></span></li>
+            </ul>
+            <p><strong>The Mnemonic Shortcut: <strong>"Break the line and change the sign."</strong></p>
+        </div>
+    </header>
+
+    <main class="card">
+        <h2>Practice Area</h2>
+        <p>Generate a mathematical logic problem to practice applying DeMorgan's Boolean equivalence laws.</p>
+        
+        <div class="controls">
+            <select id="conversion-type">
+                <option value="find-equivalent">Identify Algebraic Equivalence</option>
+                <option value="evaluate-state">Evaluate Complex Truth Value</option>
+            </select>
+            <button onclick="generateProblem()">Generate Problem</button>
+            <button id="btn-solution" onclick="showSolution()" disabled>Reveal Solution</button>
+        </div>
+
+        <div id="problem-area" class="hidden">
+            <div id="problem-statement"></div>
+            <div id="solution-area" class="hidden"></div>
+        </div>
+    </main>
+
+    <script>
+        let currentProblem = null;
+
+        // Structured expressions using clean HTML overline tags
+        const expressions = [
+            { 
+                origHtml: '<span class="bar">A &bull; B</span>', 
+                equivHtml: '<span class="bar">A</span> + <span class="bar">B</span>', 
+                calcOrig: (a, b) => !(a && b) ? 1 : 0, 
+                calcEquiv: (a, b) => (!a || !b) ? 1 : 0 
+            },
+            { 
+                origHtml: '<span class="bar">A + B</span>', 
+                equivHtml: '<span class="bar">A</span> &bull; <span class="bar">B</span>',
+                calcOrig: (a, b) => !(a || b) ? 1 : 0, 
+                calcEquiv: (a, b) => (!a && !b) ? 1 : 0 
+            },
+            { 
+                origHtml: '<span class="bar"><span class="bar">A</span> &bull; B</span>', 
+                equivHtml: 'A + <span class="bar">B</span>', 
+                calcOrig: (a, b) => !(!a && b) ? 1 : 0, 
+                calcEquiv: (a, b) => (a || !b) ? 1 : 0 
+            },
+            { 
+                origHtml: '<span class="bar">A + <span class="bar">B</span></span>', 
+                equivHtml: '<span class="bar">A</span> &bull; B', 
+                calcOrig: (a, b) => !(a || !b) ? 1 : 0, 
+                calcEquiv: (a, b) => (!a && b) ? 1 : 0 
+            }
+        ];
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateProblem() {
+            const type = document.getElementById('conversion-type').value;
+            const problemArea = document.getElementById('problem-area');
+            const statement = document.getElementById('problem-statement');
+            const solutionArea = document.getElementById('solution-area');
+            const btnSolution = document.getElementById('btn-solution');
+
+            solutionArea.innerHTML = '';
+            solutionArea.classList.add('hidden');
+            problemArea.classList.remove('hidden');
+            btnSolution.disabled = false;
+
+            const selectedIndex = getRandomInt(0, expressions.length - 1);
+            const expr = expressions[selectedIndex];
+
+            if (type === 'find-equivalent') {
+                currentProblem = { type, ...expr };
+                statement.innerHTML = `Apply DeMorgan's laws to find the simplified, equivalent expression for: <span class="expr-text">${expr.origHtml}</span>.`;
+            } else {
+                const valA = getRandomInt(0, 1);
+                const valB = getRandomInt(0, 1);
+                currentProblem = { type, ...expr, a: valA, b: valB };
+                statement.innerHTML = `Given active static wire values of <strong>A = ${valA}</strong> and <strong>B = ${valB}</strong>, calculate the output condition for the expression: <span class="expr-text">${expr.origHtml}</span>.`;
+            }
+        }
+
+        function showSolution() {
+            const solutionArea = document.getElementById('solution-area');
+            solutionArea.innerHTML = '';
+            solutionArea.classList.remove('hidden');
+            document.getElementById('btn-solution').disabled = true;
+
+            if (currentProblem.type === 'find-equivalent') {
+                renderEquivalentSolution(currentProblem, solutionArea);
+            } else {
+                renderEvaluationSolution(currentProblem, solutionArea);
+            }
+        }
+
+        function renderEquivalentSolution(prob, container) {
+            let html = ``;
+            
+            html += `<table>
+                        <tr><th>Target Expression</th><th>Transformation Action</th><th>Resulting Form</th></tr>
+                        <tr>
+                            <td><span class="expr-text">${prob.origHtml}</span></td>
+                            <td>Break the line and change the sign</td>
+                            <td><span class="expr-text">${prob.equivHtml}</span></td>
+                        </tr>
+                     </table>`;
+
+            html += `<p>We can guarantee mathematical perfection by building a matching Truth Table matrix proof:</p>`;
+            html += `<table>
+                        <tr><th>A</th><th>B</th><th>Original: ${prob.origHtml}</th><th>DeMorgan Equiv: ${prob.equivHtml}</th></tr>`;
+            
+            const states = [[0,0], [0,1], [1,0], [1,1]];
+            states.forEach(st => {
+                let r1 = prob.calcOrig(st[0], st[1]);
+                let r2 = prob.calcEquiv(st[0], st[1]);
+                html += `<tr>
+                            <td>${st[0]}</td>
+                            <td>${st[1]}</td>
+                            <td style="background-color:#fcf3cf;"><strong>${r1}</strong></td>
+                            <td style="background-color:#d5f5e3;"><strong>${r2}</strong></td>
+                         </tr>`;
+            });
+            html += `</table>`;
+
+            html += `<div class="final-answer">Equivalent Form: ${prob.equivHtml}</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderEvaluationSolution(prob, container) {
+            let ans = prob.calcOrig(prob.a, prob.b);
+            let decompHtml = "";
+            let notA = prob.a === 1 ? 0 : 1;
+            let notB = prob.b === 1 ? 0 : 1;
+
+            // Fixed: Replaced plain text 'overline()' with functional HTML components
+            if (prob.origHtml.includes("A &bull; B")) {
+                decompHtml = `<span class="bar">${prob.a} &bull; ${prob.b}</span> &rArr; <span class="bar">${prob.a && prob.b}</span> &rArr; <strong>${ans}</strong>`;
+            } else if (prob.origHtml.includes("A + B")) {
+                decompHtml = `<span class="bar">${prob.a} + ${prob.b}</span> &rArr; <span class="bar">${prob.a || prob.b}</span> &rArr; <strong>${ans}</strong>`;
+            } else if (prob.origHtml.includes('class="bar">A</span> &bull; B')) {
+                decompHtml = `<span class="bar"><span class="bar">${prob.a}</span> &bull; ${prob.b}</span> &rArr; <span class="bar">${notA} &bull; ${prob.b}</span> &rArr; <span class="bar">${notA && prob.b}</span> &rArr; <strong>${ans}</strong>`;
+            } else {
+                decompHtml = `<span class="bar">${prob.a} + <span class="bar">${prob.b}</span></span> &rArr; <span class="bar">${prob.a} + ${notB}</span> &rArr; <span class="bar">${prob.a || notB}</span> &rArr; <strong>${ans}</strong>`;
+            }
+
+            let html = `<h3>Arithmetic Trace Map</h3>`;
+            html += `<p>Substituting values directly into the pipeline logic reveals the following result:</p>`;
+            html += `<p style="font-size:1.3em; text-align:center; padding:15px; background:#f9f9f9; border-radius:6px;">${decompHtml}</p>`;
+            
+            html += `<p>Applying the DeMorgan equivalent shortcut alternative check:</p>`;
+            let altAns = prob.calcEquiv(prob.a, prob.b);
+            html += `<p style="text-align:center;">Evaluating alternative path returns identical state: <strong>${altAns}</strong></p>`;
+
+            html += `<div class="final-answer">Final Evaluated State: Y = ${ans}</div>`;
+            container.innerHTML = html;
+        }   
+    </script>
+</body>
+</html>
