@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two's Complement Mastery</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e67e22;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --success: #d4edda;
+            --success-border: #c3e6cb;
+            --success-text: #155724;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background);
+        }
+
+        h1, h2, h3 { color: var(--primary); }
+        
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .highlight-box {
+            background-color: #fdf2e9;
+            border-left: 5px solid var(--secondary);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        select, button {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover { background-color: #d35400; }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        #problem-statement {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th { background-color: #f5f6fa; font-weight: 600; }
+        
+        tr:nth-child(even) { background-color: #fafafa; }
+
+        .final-answer {
+            margin-top: 25px;
+            font-size: 1.3em;
+            background: var(--success);
+            color: var(--success-text);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--success-border);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .binary-text {
+            font-family: monospace;
+            font-size: 1.25em;
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header class="card">
+        <h1>Understanding Two's Complement</h1>
+        <p>In standard binary, we can only represent positive numbers. To represent negative numbers, digital systems use the <strong>Two's Complement</strong> framework. This is an elegant design because it allows standard arithmetic hardware to handle addition and subtraction identically without needing separate subtractor circuits.</p>
+        
+        <p>In a signed 8-bit system, the absolute far-left bit (Most Significant Bit, or MSB) becomes the <strong>sign bit</strong>. Instead of representing a positive value ($+128$), it represents a negative value ($-128$).</p>
+
+        <div class="highlight-box">
+            <h3>The Recipe for Negative Numbers</h3>
+            <p>To convert a negative decimal number to Two's Complement binary format:</p>
+            <ol>
+                <li>Write out the straight binary value of the <strong>positive version</strong> of the number. Ensure it is padded out to the fixed bit length (e.g., 8 bits).</li>
+                <li><strong>Invert all bits:</strong> Flip every 1 to a 0, and every 0 to a 1. (This is known as the One's Complement).</li>
+                <li><strong>Add 1:</strong> Perform binary addition by adding 1 to your inverted sequence.</li>
+            </ol>
+        </div>
+    </header>
+
+    <main class="card">
+        <h2>Practice Area</h2>
+        <p>Practice converting values to and from signed 8-bit Two's Complement notation.</p>
+        
+        <div class="controls">
+            <select id="conversion-type">
+                <option value="dec-to-twos">Decimal to 8-Bit Two's Complement</option>
+                <option value="twos-to-dec">8-Bit Two's Complement to Decimal</option>
+            </select>
+            <button onclick="generateProblem()">Generate Problem</button>
+            <button id="btn-solution" onclick="showSolution()" disabled>Reveal Solution</button>
+        </div>
+
+        <div id="problem-area" class="hidden">
+            <div id="problem-statement"></div>
+            <div id="solution-area" class="hidden"></div>
+        </div>
+    </main>
+
+    <script>
+        let currentProblem = null;
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function toTwosComplement8Bit(num) {
+            if (num >= 0) {
+                return num.toString(2).padStart(8, '0');
+            } else {
+                let positiveBin = Math.abs(num).toString(2).padStart(8, '0');
+                let invertedBin = positiveBin.split('').map(bit => bit === '0' ? '1' : '0').join('');
+                let decimalInverted = parseInt(invertedBin, 2);
+                let processingVal = decimalInverted + 1;
+                return processingVal.toString(2).padStart(8, '0');
+            }
+        }
+
+        function fromTwosComplement8Bit(binStr) {
+            if (binStr[0] === '0') {
+                return parseInt(binStr, 2);
+            } else {
+                let invertedBin = binStr.split('').map(bit => bit === '0' ? '1' : '0').join('');
+                let magnitude = parseInt(invertedBin, 2) + 1;
+                return -magnitude;
+            }
+        }
+
+        function generateProblem() {
+            const type = document.getElementById('conversion-type').value;
+            const problemArea = document.getElementById('problem-area');
+            const statement = document.getElementById('problem-statement');
+            const solutionArea = document.getElementById('solution-area');
+            const btnSolution = document.getElementById('btn-solution');
+
+            solutionArea.innerHTML = '';
+            solutionArea.classList.add('hidden');
+            problemArea.classList.remove('hidden');
+            btnSolution.disabled = false;
+
+            let num, questionText;
+
+            if (type === 'dec-to-twos') {
+                num = getRandomInt(-128, -1); // Generating purely negative values for targeted practice
+                currentProblem = { num: num, type: type };
+                questionText = `Convert the signed Decimal number <span style="color:#e67e22;">${num}</span> to an 8-Bit Two's Complement binary sequence.`;
+            } else {
+                let randomDec = getRandomInt(-128, 127);
+                let binStr = toTwosComplement8Bit(randomDec);
+                currentProblem = { num: binStr, type: type, target: randomDec };
+                questionText = `Convert the 8-Bit Two's Complement binary number <span class="binary-text">${binStr}</span> to its signed Decimal equivalent.`;
+            }
+
+            statement.innerHTML = questionText;
+        }
+
+        function showSolution() {
+            const solutionArea = document.getElementById('solution-area');
+            solutionArea.innerHTML = '';
+            solutionArea.classList.remove('hidden');
+            document.getElementById('btn-solution').disabled = true;
+
+            if (currentProblem.type === 'dec-to-twos') {
+                renderDecToTwos(currentProblem.num, solutionArea);
+            } else {
+                renderTwosToDec(currentProblem.num, currentProblem.target, solutionArea);
+            }
+        }
+
+        function renderDecToTwos(num, container) {
+            let absVal = Math.abs(num);
+            let posBin = absVal.toString(2).padStart(8, '0');
+            let invertedBin = posBin.split('').map(bit => bit === '0' ? '1' : '0').join('');
+            let finalBin = toTwosComplement8Bit(num);
+
+            let html = `<h3>Step-by-Step Conversion</h3>`;
+            html += `<table>
+                        <tr><th>Step</th><th>Description</th><th>Value</th></tr>
+                        <tr><td>1</td><td>Find absolute value and pad to 8 bits</td><td class="binary-text">${posBin} (+$ {absVal})</td></tr>
+                        <tr><td>2</td><td>Invert all bits (One's Complement)</td><td class="binary-text">${invertedBin}</td></tr>
+                        <tr><td>3</td><td>Add 1 to the sequence</td><td class="binary-text">+ 00000001</td></tr>
+                     </table>`;
+            
+            html += `<div class="final-answer">Final Answer: ${finalBin}<sub>2</sub></div>`;
+            container.innerHTML = html;
+        }
+
+        function renderTwosToDec(binStr, target, container) {
+            let html = `<h3>Step-by-Step Evaluation</h3>`;
+            
+            if (binStr[0] === '0') {
+                html += `<p>The most significant bit (MSB) is <strong>0</strong>, which indicates this is a <strong>positive</strong> number. Evaluate it directly using standard positional notation.</p>`;
+                html += `<table><tr><th>Bit Position Weights</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>`;
+                html += `<tr><th>Binary Bits</th>` + binStr.split('').map(b => `<td><strong>${b}</strong></td>`).join('') + `</tr></table>`;
+            } else {
+                html += `<p>The most significant bit (MSB) is <strong>1</strong>, which indicates this is a <strong>negative</strong> number. We can evaluate it by isolating the negative sign-bit weight balance:</p>`;
+                html += `<table><tr><th>Bit Position Weights</th><td style="color:red; font-weight:bold;">-128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>`;
+                html += `<tr><th>Binary Bits</th>` + binStr.split('').map((b, i) => i === 0 ? `<td style="color:red;"><strong>${b}</strong></td>` : `<td><strong>${b}</strong></td>`).join('') + `</tr></table>`;
+                
+                let weightSumExpr = [];
+                let weights = [-128, 64, 32, 16, 8, 4, 2, 1];
+                weights.forEach((w, i) => {
+                    if (binStr[i] === '1') weightSumExpr.push(w);
+                });
+                
+                html += `<p style="text-align:center; font-size:1.1em;">Summing weights: ${weightSumExpr.join(' + ')} = <strong>${target}</strong></p>`;
+            }
+
+            html += `<div class="final-answer">Final Decimal Answer: ${target}<sub>10</sub></div>`;
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
