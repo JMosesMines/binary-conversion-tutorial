@@ -1,16 +1,119 @@
 :root {
-    --primary: #2c3e50;
-    --background: #f8f9fa;
+/* Primary structural & prominent header elements */
+    --primary: #21314D;             /* Mines Dark Blue */
+    --text: #21314D;             /* Mines Dark Blue */
+    --secondary: #57A2BD;
+    --background: #ffffff;
+/* Subtle background fills for table headers & alternating rows (Replaces #f5f6fa) */
+    --bg-subtle: rgba(33, 49, 77, 0.06); /* 4% Mines Dark Blue tint */
+/* Soft, brand-tinted drop shadow */
+    --shadow: rgba(33, 49, 77, 0.05);
+/* Distinct UI elements & active button borders */
+    --border-interactive: #879EC3; /* Mines Light Blue */
+/* Subtle dividers & table gridlines */
+    --border-subtle: #CFDCE9;     /* Mines Pale Blue */
+
     --card-bg: #ffffff;
-    --success: #d4edda;
-    --success-border: #c3e6cb;
-    --success-text: #155724;
+    --success: rgba(128, 195, 66, 0.12);
+    --success-border: #80C342;
+    --success-text: #21314D;
+}
+
+/* Strip template restrictions from the main header structural block */
+#main-header {
+    top: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Arrange the logo and banner side-by-side and center them vertically */
+.header_container {
+    display: flex;
+    align-items: flex-start; 
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 0 0 20px; /* Gives both assets a clean breathing margin from the screen edges */
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Keep the logo constrained and structurally protected from squishing */
+#header-logo {
+    height: 45px !important; /* Matches your baseline header scale */
+    width: auto !important;
+    flex-shrink: 0; /* Prevents the banner from compressing the logo width */
+    margin-right: 20px; /* Creates a clean gap between the logo and the banner */
+}
+
+/* Force the banner to claim all remaining horizontal viewport space */
+#header-banner {
+    flex: 1 1 auto; /* Allows banner to occupy all available right-side space */
+    min-width: 0;   /* Essential flexbox fix: stops image from clipping/overflowing */
+    height: 120px !important; /* Matches logo height */
+    width: 100% !important;
+    object-fit: contain; /* Renders the FULL image without cutting off edges */
+    object-position: left top; /* Keeps banner aligned with the top-left of its space */
+}
+
+/* Container styling to sit right next to the logo */
+.header-custom-banner {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 25px; /* Adjust spacing between logo and your banner */
+    max-height: 65%;   /* Mimics Divi's default logo height restrictions */
+    transition: all 0.4s ease-in-out; /* Keeps transitions in sync with the header shrink */
+}
+
+/* Keeps the logo container from forcing line breaks */
+.logo_container {
+    max-width: 70% !important; 
+    width: auto !important;
+}
+
+/* Force the image to scale proportionally based on height */
+#logo {
+    display: inline-block;
+    vertical-align: middle;
+    width: auto !important;
+    height: auto !important;
+    max-height: 74px !important; /* Adjust based on your header's look (74px fits a 114px header well) */
+}
+
+/* Ensure helper span stays inline with the new dimensions */
+.logo_helper {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+/* Constrain the image size contextually */
+#custom-banner {
+    display: block;
+    height: auto;
+    max-height: 74px; /* Default height based on a 114px header height */
+    width: auto;      /* Protects aspect ratio */
+    transition: all 0.4s ease-in-out;
+}
+
+/* Adjusts the banner size when the header shrinks on scroll */
+#main-header.et-fixed-header #custom-banner {
+    max-height: 68px; /* Slightly smaller maximum height for the fixed header state */
+}
+
+/* Ensure the layout helper span stays inline with the banner dimensions */
+.banner_helper {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, Calibri, "Open Sans", sans-serif;
     line-height: 1.6;
-    color: #333;
+    color: #21314D;
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
@@ -23,12 +126,12 @@ h1, h2, h3 { color: var(--primary); }
     background: var(--card-bg);
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(33, 49, 77, 0.05);
     margin-bottom: 25px;
 }
 
 .highlight-box {
-    background-color: #f5eef8;
+    background-color: #CFDCE9;
     border-left: 5px solid var(--secondary);
     padding: 15px 20px;
     margin: 20px 0;
@@ -46,7 +149,7 @@ select, button {
     padding: 12px;
     font-size: 16px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid #879EC3;
     outline: none;
 }
 
@@ -59,10 +162,10 @@ button {
     transition: background-color 0.2s;
 }
 
-button:hover { background-color: #6c3483; }
+button:hover { background-color: #0272DE; }
 
 button:disabled {
-    background-color: #bdc3c7;
+    background-color: #AEB3B8;
     cursor: not-allowed;
 }
 
@@ -81,14 +184,14 @@ table {
 }
 
 th, td {
-    border: 1px solid #e0e0e0;
+    border: 1px solid #CFDCE9;
     padding: 12px;
     text-align: center;
 }
 
-th { background-color: #f5f6fa; font-weight: 600; }
+th { background-color: var(--bg-subtle); font-weight: 600; }
 
-tr:nth-child(even) { background-color: #fafafa; }
+tr:nth-child(even) { background-color: rgba(33, 49, 77, 0.03); } /* 2% Mines Dark Blue tint */
 
 /* The Illusion-Breaker: Renders crisp, independent stacked bars */
 .bar {
@@ -103,14 +206,18 @@ tr:nth-child(even) { background-color: #fafafa; }
     top: 0;
     left: 0;
     right: 0;
-    border-top: 2px solid #2c3e50;
+    border-top: 2px solid #21314D;
 }
 
 .expr-text {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     font-size: 1.3em;
-    background: #eee;
+    /* Luminous brand blend: sits perfectly between Pale Blue and Pure White */
+    background: rgba(255, 255, 255, 0.65); 
+  
+    /* Ensures crisp, accessible typography contrast inside the highlight */
+    color: #21314D; /* Mines Dark Blue */
     padding: 4px 8px;
     border-radius: 4px;
     display: inline-block;
@@ -143,10 +250,10 @@ tr:nth-child(even) { background-color: #fafafa; }
 .academic-footer {
     font-size: 0.85em;
     color: #7f8c8d;
-    text-align: center;
+    text-align: left;
     margin-top: 40px;
     padding-top: 20px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid (33, 49, 77, 0.65);
     line-height: 1.4;
 }
 
@@ -156,3 +263,57 @@ tr:nth-child(even) { background-color: #fafafa; }
 }
 
 .hidden { display: none; }
+
+/* --- Production CSS Rules Extracted from the Theme Framework --- */
+
+#main-header {
+  position: relative;
+  background-color: #ffffff;
+  width: 100%;
+  z-index: 99999;
+  /* Hardcoding the live site's runtime height value since JS isn't injecting it */
+  height: 114px; 
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  backface-visibility: hidden;
+}
+
+#main-header .container {
+  position: relative;
+  width: 80%;
+  max-width: 1080px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+/* Divi's clearfix structural fix used on the live site */
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+#main-header .logo_container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  transition: all 0.4s ease-in-out;
+}
+
+/* The vertical alignment engine used by the theme */
+#main-header .logo_helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+#main-header #logo {
+  display: inline-block;
+  vertical-align: middle;
+  /* Replicates the live theme's data-height-percentage="65" rule */
+  max-height: 65%; 
+  width: auto;
+  height: auto;
+  transition: all 0.4s ease-in-out;
+}

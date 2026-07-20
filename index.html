@@ -28,6 +28,33 @@
             margin-bottom: auto;
         }
 
+        /* Strip all template defaults from the root header container */
+        #main-header {
+            height: auto !important;
+            min-height: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important; /* Removes legacy bottom shadows */
+            background: transparent !important;
+        }
+
+        /* Ensure the wrapper stretches across 100% of the browser width */
+        .banner_container {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden;
+        }
+
+        /* Force the banner asset to scale fluidly with the screen width */
+        #header-banner {
+            display: block;
+            width: 100% !important;
+            height: auto !important; 
+            max-height: none !important; 
+        }
+
         .tutorial-button {
             display: inline-block;
             padding: 20px 40px;
@@ -55,6 +82,18 @@
     </style>
 </head>
 <body>
+
+    <header id="main-header" data-height-onload="114" data-height-loaded="true" data-fixed-height-onload="106" class="">
+        <div class="header_container">
+                <a href="https://www.mines.edu">
+                    <img src="/mines-institutional-mark.png" width="982" height="258" alt="Colorado School of Mines" id="header-logo" data-height-percentage="65" data-actual-width="982" data-actual-height="258">
+                </a>
+                
+                <img src="/banner.png" alt="Header Banner" id="header-banner">
+                
+            </div>
+        </div> <!-- .container -->
+    </header>
     <div class="container">
         <a href="base-conversion.html" class="tutorial-button" style="margin-bottom: 20px;">
             Number System Conversion
