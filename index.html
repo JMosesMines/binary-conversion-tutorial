@@ -57,18 +57,17 @@
 
         .tutorial-button {
             display: inline-block;
-            padding: 20px 40px;
-            font-size: 1.25rem;
+            padding: 10px 24px; /* Reduced vertical padding (top/bottom) and horizontal padding */
+            font-size: 1rem;    /* Scaled font down slightly to maintain proportion */
             font-weight: bold;
             color: white;
             background-color: var(--primary);
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 6px;  /* Adjusted radius slightly for better visual fit */
             border: 2px solid var(--primary);
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(44, 62, 80, 0.15);
         }
-
         .tutorial-button:hover {
             background-color: var(--secondary);
             border-color: var(--secondary);
@@ -107,12 +106,19 @@
             Boolean Logic Gates
         </a>
         <br>
-        <a href="demorgans-theorem.html" class="tutorial-button">
+        <a href="demorgans-theorem.html" class="tutorial-button" style="margin-bottom: 20px;">
             DeMorgan's Theorem
+        </a>
+        <br>
+        <a href="noise-margins.html" class="tutorial-button">
+            Noise Margins
+        </a>
+        <a href="transistor-switch.html" class="tutorial-button">
+            Transistors as Switches
         </a>
     </div>
     <footer class="academic-footer">
-        <p>This educational digital logic suite was developed code-procedurally by Josh Moses with interactive engineering assistance from Google Gemini (July 2026). All math rendering verification, dynamic truth-table evaluation logic, and nested CSS overline layout structures were co-authored during collaborative troubleshooting sessions.</p>
+        <p>Developed by Josh Moses with engineering assistance from Google Gemini (July 2026).</p>
     </footer>
 </body>
 </html>

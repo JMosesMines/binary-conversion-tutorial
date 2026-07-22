@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transistors as switches</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .tutorial-media {
+        width: 100%;
+        height: auto;          /* Maintains the original aspect ratio */
+        display: block;
+        margin: 0 auto;        /* Centers the image horizontally */
+        border-radius: 8px;    /* Matches your site's rounded card aesthetic */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle elevation */
+    }
+
+    /* Optional Figure Caption Styling */
+    .media-container {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    figcaption {
+        font-size: 0.9em;
+        color: #7f8c8d;
+        margin-top: 8px;
+        font-style: italic;
+    }       
+    </style>
+</head>
+<body>
+<header class="card">
+    <h1>Transistors as Switches</h1>
+    <p>A transistor is a three terminal device in which a small electrical signal on one terminal controls the flow of current between the other two.  In a digital system, transistors are driven in either cutoff or saturation mode to produce the binary behavior of an on/off switch.  The example below shows an <strong>NPN</strong> transistor used as a switch on the <strong>low-side</strong> of the LED load.  That is, the transistor is placed between the load and ground.</p>
+    <figure class="media-container">
+        <img src="images/npn-switch-led.png" alt="Noise margins" class="tutorial-media" style="max-width: 350px;">
+        <figcaption>NPN Switch Circuit
+            <span class="source-credit">
+            Source: <a href="https://learn.sparkfun.com/tutorials/transistors/applications-i-switches=" target="_blank" rel="noopener noreferrer">Sparkfun</a>
+        </span>
+        </figcaption>
+    </figure>
+    <p>A <strong>PNP</strong> transistor is suitable as a switch on the <strong>high-side</strong> of a load (here a motor), between <em>V<sub>CC</sub></em> and the load, as shown in the example below:</p>
+    <figure class="media-container">
+        <img src="images/pnp-switch-motor_3.png" alt="Noise margins" class="tutorial-media" style="max-width: 400px;">
+        <figcaption>PNP Switch Circuit
+            <span class="source-credit">
+            Source: <a href="https://learn.sparkfun.com/tutorials/transistors/applications-i-switches" target="=_blank" rel="noopener noreferrer">Sparkfun</a>
+        </span>
+        </figcaption>
+    </figure>
+    <p>Both of the preceding circuits use a <strong>base resistor</strong> in series to protect the transistor from excess base current.</p>
+    <h3>CMOS</h3>
+    <p>MOSFETs can also be used as digital switches.  In modern digital electronics, MOSFETs are preferred, because they operate with very low power consumption, due to their insulated gate and that their switching operation is voltage-controlled rather than current-controlled.</p>
+    <h2>Building a logic gate</h2>
+    <h3>Pullup resistor</h3>
+    <p>Thanks to their switching behavior, transistors can be used to build logic gates, but we want the output of a logic gate to be either High or Low voltage.  A switch alone does not produce a High or Low voltge by itself, it merely allows or blocks current flow.  To get a High or Low output voltage from a switch or transistor, we need to use a <strong>pullup resistor</strong>.  The diagrams below show a switch on the low-side of its output terminal.  Thus, when the switch is closed, the output node is grounded (Logic Low).  When the switch is open, if there were no pullup resistor, the output would be <em>floating</em>.  The pullup resistor pulls the output voltage to <em>V<sub>CC</sub></em> to represent Logic High when the switch is open.</p>
+    <figure class="media-container">
+        <img src="images/pullup-resistor.gif" alt="Circuit diagram to illustrate the use of a pullup resistor" class="tutorial-media" style="max-width: 600px;">
+        <figcaption>Pullup resistor
+            <span class="source-credit">
+            Source: <a href="https://www.electronics-tutorials.ws/logic/logic_1.html" rel="noopener noreferrer" target="=_blank">Electronics Tutorials</a>
+        </span>
+        </figcaption>
+    </figure>
+    <h3>Single transistor inverter</h3>
+    <p>By using an output pullup resistor, a logical inverter can be implemented with just a single transistor.</p>
+     <figure class="media-container">
+        <img src="images/single-transistor-inverter.png" alt="Circuit diagram to of a single transistor inverter" class="tutorial-media" style="max-width: 250px;">
+        <figcaption>Single transistor inverter
+            <span class="source-credit">
+            Source: <a href="https://learn.sparkfun.com/tutorials/transistors/applications-i-switches" rel="noopener noreferrer" target="=_blank">SparkFun</a>
+        </span>
+        </figcaption>
+    </figure>   
+    <p>In this circuit, when the input voltage is High, the transistor conducts, pulling the output voltage Low.  When the input voltage is Low, the transistor does not conduct, and the pullup resistor pulls the output voltage to High.</p>
+    <h3>Single transistor inverter</h3>
+    <p>By using an output pullup resistor, a logical inverter can be implemented with just a single transistor.</p>
+     <figure class="media-container">
+        <img src="images/single-transistor-inverter.png" alt="Circuit diagram to of a single transistor inverter" class="tutorial-media" style="max-width: 250px;">
+        <figcaption>Single transistor inverter
+            <span class="source-credit">
+            Source: <a href="https://learn.sparkfun.com/tutorials/transistors/applications-i-switches" rel="noopener noreferrer" target="=_blank">SparkFun</a>
+        </span>
+        </figcaption>
+    </figure>   
+    <p>In this circuit, when the input voltage is High, the transistor conducts, pulling the output voltage Low.  When the input voltage is Low, the transistor does not conduct, and the pullup resistor pulls the output voltage to High.</p>
+</header>
+
+<footer class="academic-footer">
+    <p>Developed by Josh Moses with engineering assistance from Google Gemini (July 2026).</p>
+</footer>

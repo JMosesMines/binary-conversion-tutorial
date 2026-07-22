@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noise Margins</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .tutorial-media {
+        max-width: 100%;       /* Ensures the GIF never overflows the card */
+        height: auto;          /* Maintains the original aspect ratio */
+        display: block;
+        margin: 0 auto;        /* Centers the image horizontally */
+        border-radius: 8px;    /* Matches your site's rounded card aesthetic */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle elevation */
+    }
+
+    /* Optional Figure Caption Styling */
+    .media-container {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    figcaption {
+        font-size: 0.9em;
+        color: #7f8c8d;
+        margin-top: 8px;
+        font-style: italic;
+    }       
+    </style>
+</head>
+<body>
+
+<header class="card">
+    <h1>Noise Margins</h1>
+    <p><strong>Noise margins</strong> in digital systems are not the same as <strong>logic thresholds</strong>, but to understand noise margins, you have to understand logic thresholds first.</p>
+    <h3>Logic Thresholds</h3>
+    <p>The acceptable ranges of voltages to be interpreted digitally as definitely "Low" or "High" is defined by each IC manufacturer, and standardized for each technology family such as TTL or CMOS.</p>
+    <ul>
+        <li><em>V<sub>IH</sub></em> <strong>(High Level Input Voltage)</strong> The minimum voltage at an input recognized as a logic HIGH</li>
+        <li><em>V<sub>IL</sub></em> <strong>(Low Level Input Voltage)</strong> The maximum voltage at an input recognized as a logic LOW</li>
+        <li><em>V<sub>OH</sub></em> <strong>(High Level Output Voltage)</strong> The minimum voltage produced at the output for a logic HIGH</li>
+        <li><em>V<sub>OL</sub></em> <strong>(Low Level Output Voltage)</strong> The maximum voltage produced at the output for a logic LOW</li>
+    </ul>
+    <p>On the input side, the IC manufacturer guarantees that any voltage less than V<sub>IL</sub> will be interpreted as "Low" and any voltage greater than V<sub>IH</sub> will be interpreted as "High".  On the output side, the IC manufacturer guarantees that the a "Low" logic result will produce a voltage less than V<sub>OL</sub> and that a "High" logic result will produce a voltage greater than V<sub>OH</sub>.  Thus each logic level has a <strong>tolerance range</strong>, which may be different on the input versus output sides of a device.  Between the lower and upper specified threshold there is an <strong>indeterminate</strong> or (<em>forbidden</em>) <strong>region</strong>.  A voltage in the indeterminate range risks being misinterpreted as the incorrect logic level, resulting in a data transmission error.</p>
+    <h3>Noise</h3>
+    <p>When a signal is transmitted along a wire from the output of a driver IC to the input of a receiver IC, the signal is susceptible to random unwanted voltage fluctuations caused by electromagnetic interference.  Thus, the voltage received on the input may include small random fluctuations superimposed onto the intended, or driven, voltage level.  Digital IC's are designed to have some immunity against such interference.</p>
+    <p>If the acceptable output voltage of the IC driving a wire were exactly equal to the logic threshold voltage on the input side of the IC receiving that signal, then the noise margin would be zero.  That is, any noise added to the voltage signal by interference on the wire, could push its voltage across the input threshold and risk misinterpretation of the binary data value.</p>
+    <h3>Noise Margin</h3>
+    <p>To allow for some <strong>noise margin</strong>, we must have V<sub>OH</sub> > V<sub>IH</sub> and V<sub>OL</sub> < V<sub>IL</sub>.  The <strong>noise margin</strong> is the <em>difference</em> between the input and output voltage thresholds, or Min((V<sub>OH</sub> - V<sub>IH</sub>), (V<sub>IL</sub> - V<sub>OL</sub>))</p>
+
+    <figure class="media-container">
+        <img src="images/logic-levels.gif" alt="Noise margins" class="tutorial-media">
+        <figcaption>TTL Input & Output Voltage Levels
+            <span class="source-credit">
+            Source: <a href="https://www.electronics-tutorials.ws/logic/logic_1.html target="_blank" rel="noopener noreferrer">Electronics Tutorials</a>
+        </span>
+        </figcaption>
+    </figure>
+
+</header>
+
+<footer class="academic-footer">
+    <p>Developed by Josh Moses with engineering assistance from Google Gemini (July 2026).</p>
+</footer>
